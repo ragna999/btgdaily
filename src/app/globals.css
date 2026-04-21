@@ -1,26 +1,69 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-serif: "Lora", "Georgia", "Times New Roman", serif;
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+
+  --color-brand-black: #0a0a0a;
+  --color-brand-red: #c8102e;
+  --color-border: #d9d9d9;
+  --color-muted: #6b6b6b;
+  --color-subtle: #f5f5f5;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-family: var(--font-sans);
+  color: var(--color-brand-black);
+  background: #ffffff;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.font-serif {
+  font-family: var(--font-serif);
 }
+
+.prose-article {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  font-family: "Georgia", serif;
+}
+
+.prose-article p {
+  margin-bottom: 1.25rem;
+}
+
+.prose-article h2 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-serif);
+}
+
+.prose-article h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-serif);
+}
+
+.prose-article blockquote {
+  border-left: 3px solid var(--color-brand-black);
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+/* TipTap editor content styling */
+.tiptap p { margin-bottom: 1rem; }
+.tiptap h2 { font-size: 1.375rem; font-weight: 700; margin: 1.5rem 0 0.5rem; font-family: var(--font-serif); }
+.tiptap h3 { font-size: 1.125rem; font-weight: 600; margin: 1.25rem 0 0.5rem; font-family: var(--font-serif); }
+.tiptap ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+.tiptap ol { list-style: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+.tiptap li { margin-bottom: 0.25rem; }
+.tiptap blockquote { border-left: 3px solid var(--color-brand-black); padding-left: 1rem; margin: 1rem 0; font-style: italic; color: var(--color-muted); }
+.tiptap strong { font-weight: 700; }
+.tiptap em { font-style: italic; }
+.tiptap s { text-decoration: line-through; }
+.tiptap p.is-editor-empty:first-child::before { content: attr(data-placeholder); color: var(--color-muted); pointer-events: none; float: left; height: 0; }
