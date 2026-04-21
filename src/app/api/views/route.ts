@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
   if (!articleId || typeof articleId !== "number") {
     return NextResponse.json({ error: "Invalid articleId" }, { status: 400 });
   }
-  const { error } = await supabase.rpc("increment_article_views", { p_article_id: articleId });
-  if (error) console.error("RPC error:", error);
-  return NextResponse.json({ ok: true, error: error?.message });
+  await supabase.rpc("increment_article_views", { p_article_id: articleId });
+  return NextResponse.json({ ok: true });
 }
