@@ -63,7 +63,6 @@ export default function Footer() {
 
         <div className="mt-8 pt-6 border-t border-gray-700 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-500">
           <p>© {year} Bantargebang Daily. Seluruh hak cipta dilindungi.</p>
-          <p>Dibuat dengan ❤ untuk warga Bantargebang</p>
         </div>
       </div>
     </footer>
