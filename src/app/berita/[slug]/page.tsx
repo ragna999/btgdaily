@@ -99,16 +99,21 @@ export default async function ArticlePage({ params }: Props) {
               {article.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-3 text-xs text-[var(--color-muted)] pb-4 border-b border-[var(--color-border)] mb-6">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--color-muted)] pb-5 border-b border-[var(--color-border)] mb-6">
               {article.author && (
-                <span className="font-semibold text-[var(--color-brand-black)]">
-                  {article.author.name}
-                </span>
+                <>
+                  <span className="font-semibold text-[var(--color-brand-black)]">
+                    {article.author.name}
+                  </span>
+                  <span className="text-[var(--color-border)]">|</span>
+                </>
               )}
               <time dateTime={article.published_at}>
                 {formatDate(article.published_at)}
               </time>
+              <span className="text-[var(--color-border)]">|</span>
               <span>{readTime} menit baca</span>
+              <span className="text-[var(--color-border)]">|</span>
               <span>{article.article_metrics?.views ?? 0} tayangan</span>
             </div>
 
@@ -145,29 +150,29 @@ export default async function ArticlePage({ params }: Props) {
             <ShareButtons title={article.title} />
 
             {article.author && (
-              <div className="mt-10 pt-6 border-t border-[var(--color-border)] flex items-start gap-4">
-                <Link href={`/penulis/${article.author.id}`} className="shrink-0">
-                  {article.author.avatar_url ? (
-                    <img
-                      src={article.author.avatar_url}
-                      alt={article.author.name}
-                      className="w-14 h-14 rounded-full object-cover hover:opacity-90 transition-opacity"
-                    />
-                  ) : (
-                    <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-xl font-bold text-gray-500">
-                        {article.author.name[0].toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                </Link>
-                <div>
-                  <p className="text-[10px] text-[var(--color-muted)] uppercase tracking-widest mb-0.5">
-                    Ditulis oleh
-                  </p>
+              <div className="mt-10 pt-6 border-t border-[var(--color-border)]">
+                <p className="text-[10px] text-[var(--color-muted)] uppercase tracking-widest mb-3">
+                  Ditulis oleh
+                </p>
+                <div className="flex items-center gap-4">
+                  <Link href={`/penulis/${article.author.id}`} className="shrink-0">
+                    {article.author.avatar_url ? (
+                      <img
+                        src={article.author.avatar_url}
+                        alt={article.author.name}
+                        className="w-12 h-12 rounded-full object-cover ring-2 ring-[var(--color-border)] hover:ring-[var(--color-brand-black)] transition-all"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-[var(--color-subtle)] ring-2 ring-[var(--color-border)] flex items-center justify-center">
+                        <span className="text-lg font-bold text-[var(--color-muted)]" style={{ fontFamily: "var(--font-serif)" }}>
+                          {article.author.name[0].toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
                   <Link
                     href={`/penulis/${article.author.id}`}
-                    className="font-bold text-sm hover:underline"
+                    className="font-bold text-base hover:text-[var(--color-brand-red)] transition-colors"
                     style={{ fontFamily: "var(--font-serif)" }}
                   >
                     {article.author.name}

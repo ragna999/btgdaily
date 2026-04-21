@@ -23,11 +23,11 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
   }
 
   return (
-    <nav className="flex items-center justify-center gap-1 mt-10">
+    <nav className="flex items-center justify-center gap-1 mt-12" aria-label="Pagination">
       {currentPage > 1 && (
         <Link
           href={pageHref(basePath, currentPage - 1)}
-          className="px-3 py-1.5 text-sm border border-[var(--color-border)] hover:bg-[var(--color-subtle)] transition-colors"
+          className="px-4 py-2 text-sm border border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-brand-black)] hover:text-[var(--color-brand-black)] transition-colors"
         >
           ← Sebelumnya
         </Link>
@@ -35,17 +35,17 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
 
       {pages.map((p, i) =>
         p === "..." ? (
-          <span key={`ellipsis-${i}`} className="px-2 py-1.5 text-sm text-[var(--color-muted)]">
+          <span key={`ellipsis-${i}`} className="px-3 py-2 text-sm text-[var(--color-muted)]">
             …
           </span>
         ) : (
           <Link
             key={p}
             href={pageHref(basePath, p)}
-            className={`px-3 py-1.5 text-sm border transition-colors ${
+            className={`px-3 py-2 text-sm border transition-colors ${
               p === currentPage
-                ? "bg-[var(--color-brand-black)] text-white border-[var(--color-brand-black)]"
-                : "border-[var(--color-border)] hover:bg-[var(--color-subtle)]"
+                ? "bg-[var(--color-brand-black)] text-white border-[var(--color-brand-black)] font-semibold"
+                : "border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-brand-black)] hover:text-[var(--color-brand-black)]"
             }`}
           >
             {p}
@@ -56,7 +56,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
       {currentPage < totalPages && (
         <Link
           href={pageHref(basePath, currentPage + 1)}
-          className="px-3 py-1.5 text-sm border border-[var(--color-border)] hover:bg-[var(--color-subtle)] transition-colors"
+          className="px-4 py-2 text-sm border border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-brand-black)] hover:text-[var(--color-brand-black)] transition-colors"
         >
           Berikutnya →
         </Link>

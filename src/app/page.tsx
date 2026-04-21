@@ -54,9 +54,12 @@ export default async function HomePage({ searchParams }: Props) {
 
                 {trending.length > 0 && (
                   <div className="mt-4 pt-4 border-t border-[var(--color-border)]">
-                    <h2 className="text-xs font-bold uppercase tracking-widest mb-3">
-                      Trending
-                    </h2>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-1 h-4 bg-[var(--color-brand-red)]" />
+                      <h2 className="text-xs font-bold uppercase tracking-widest">
+                        Trending
+                      </h2>
+                    </div>
                     <ol className="space-y-0">
                       {trending.map((article, i) => (
                         <li
@@ -84,12 +87,15 @@ export default async function HomePage({ searchParams }: Props) {
         {latest.length > 0 ? (
           <section>
             <div className="flex items-center gap-4 mb-6">
-              <h2
-                className="text-lg font-bold whitespace-nowrap"
-                style={{ fontFamily: "var(--font-serif)" }}
-              >
-                Berita Terbaru
-              </h2>
+              <div className="flex items-center gap-3">
+                <div className="w-1 h-5 bg-[var(--color-brand-red)]" />
+                <h2
+                  className="text-base font-bold uppercase tracking-widest"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
+                  Berita Terbaru
+                </h2>
+              </div>
               <div className="flex-1 h-px bg-[var(--color-border)]" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
