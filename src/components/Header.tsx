@@ -20,10 +20,10 @@ export default async function Header() {
       {/* Top utility bar */}
       <div className="border-b border-[var(--color-border)]">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
-          <span className="text-[11px] text-[var(--color-muted)] tracking-wide">
+          <span className="hidden sm:inline text-[11px] text-[var(--color-muted)] tracking-wide">
             {formatHeaderDate()}
           </span>
-          <nav className="flex gap-5">
+          <nav className="flex gap-5 ml-auto sm:ml-0">
             <Link
               href="#"
               className="text-[11px] text-[var(--color-muted)] hover:text-[var(--color-brand-black)] transition-colors"
@@ -42,7 +42,7 @@ export default async function Header() {
 
       {/* Masthead */}
       <div className="border-b-2 border-[var(--color-brand-black)]">
-        <div className="max-w-7xl mx-auto px-4 py-7 text-center">
+        <div className="max-w-7xl mx-auto px-4 py-4 md:py-7 text-center">
           <Link href="/" className="inline-block group">
             <h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--color-brand-black)] group-hover:opacity-70 transition-opacity duration-200"
@@ -51,19 +51,19 @@ export default async function Header() {
               Bantargebang Times
             </h1>
           </Link>
-          <div className="flex items-center justify-center gap-4 mt-2.5">
-            <div className="h-px w-14 bg-[var(--color-border)]" />
-            <p className="text-[10px] text-[var(--color-muted)] tracking-[0.25em] uppercase">
+          <div className="flex items-center justify-center gap-3 mt-2">
+            <div className="h-px w-10 sm:w-14 bg-[var(--color-border)]" />
+            <p className="text-[10px] text-[var(--color-muted)] tracking-[0.2em] uppercase">
               Berita Terkini &middot; Akurat &middot; Terpercaya
             </p>
-            <div className="h-px w-14 bg-[var(--color-border)]" />
+            <div className="h-px w-10 sm:w-14 bg-[var(--color-border)]" />
           </div>
         </div>
       </div>
 
       {/* Search bar */}
       <div className="border-b border-[var(--color-border)] bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex justify-end">
+        <div className="max-w-7xl mx-auto px-4 py-2">
           <SearchBar />
         </div>
       </div>

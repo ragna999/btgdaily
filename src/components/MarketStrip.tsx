@@ -120,18 +120,22 @@ async function MarketData() {
 
 export default function MarketStrip() {
   return (
-    <div className="border-b border-[var(--color-border)] bg-[var(--color-subtle)] overflow-x-auto scrollbar-none text-[10.5px]">
-      <div className="py-1.5">
-        <Suspense
-          fallback={
-            <div className="flex items-center px-4 text-[var(--color-muted)]">
-              <span>Memuat data pasar&hellip;</span>
-            </div>
-          }
-        >
-          <MarketData />
-        </Suspense>
+    <div className="relative border-b border-[var(--color-border)] bg-[var(--color-subtle)] text-[10.5px]">
+      <div className="overflow-x-auto scrollbar-none">
+        <div className="py-1.5">
+          <Suspense
+            fallback={
+              <div className="flex items-center px-4 text-[var(--color-muted)]">
+                <span>Memuat data pasar&hellip;</span>
+              </div>
+            }
+          >
+            <MarketData />
+          </Suspense>
+        </div>
       </div>
+      {/* Scroll fade hint on mobile */}
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[var(--color-subtle)] to-transparent sm:hidden" />
     </div>
   );
 }

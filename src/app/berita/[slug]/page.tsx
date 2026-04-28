@@ -99,21 +99,16 @@ export default async function ArticlePage({ params }: Props) {
               {article.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--color-muted)] pb-5 border-b border-[var(--color-border)] mb-6">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--color-muted)] pb-5 border-b border-[var(--color-border)] mb-6">
               {article.author && (
-                <>
-                  <span className="font-semibold text-[var(--color-brand-black)]">
-                    {article.author.name}
-                  </span>
-                  <span className="text-[var(--color-border)]">|</span>
-                </>
+                <span className="font-semibold text-[var(--color-brand-black)]">
+                  {article.author.name}
+                </span>
               )}
               <time dateTime={article.published_at}>
                 {formatDate(article.published_at)}
               </time>
-              <span className="text-[var(--color-border)]">|</span>
               <span>{readTime} menit baca</span>
-              <span className="text-[var(--color-border)]">|</span>
               <span>{article.article_metrics?.views ?? 0} tayangan</span>
             </div>
 

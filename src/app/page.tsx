@@ -41,19 +41,22 @@ export default async function HomePage({ searchParams }: Props) {
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
         {/* Hero section — only on page 1 */}
         {page === 1 && heroArticle && (
-          <section className="border-b border-[var(--color-border)] pb-10 mb-10">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <section className="border-b border-[var(--color-border)] pb-6 mb-6 sm:pb-10 sm:mb-10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
               <div className="lg:col-span-2 lg:border-r lg:border-[var(--color-border)] lg:pr-8">
                 <ArticleCard article={heroArticle} variant="hero" />
               </div>
 
               <div className="flex flex-col">
+                {/* Side articles hidden on mobile — appear in the grid below */}
                 {sideArticles.map((article) => (
-                  <ArticleCard key={article.id} article={article} variant="side" />
+                  <div key={article.id} className="hidden sm:block">
+                    <ArticleCard article={article} variant="side" />
+                  </div>
                 ))}
 
                 {trending.length > 0 && (
-                  <div className="mt-5 pt-5 border-t border-[var(--color-border)]">
+                  <div className="mt-4 pt-4 border-t border-[var(--color-border)] sm:mt-5 sm:pt-5">
                     <div className="mb-3 pb-2 border-b-2 border-[var(--color-brand-black)]">
                       <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
                         Trending
