@@ -14,7 +14,7 @@ export default function LoginPage() {
             className="text-2xl font-bold"
             style={{ fontFamily: "var(--font-serif)" }}
           >
-            Bantargebang Daily
+            Bantargebang Times
           </h1>
           <p className="text-xs text-[var(--color-muted)] mt-1 uppercase tracking-widest">
             Admin Panel

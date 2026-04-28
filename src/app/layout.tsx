@@ -8,16 +8,16 @@ const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "Bantargebang Daily",
-    template: "%s | Bantargebang Daily",
+    default: "Bantargebang Times",
+    template: "%s | Bantargebang Times",
   },
   description:
     "Berita terkini seputar Bantargebang dan sekitarnya. Cepat, akurat, dan terpercaya.",
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://bantargebangdaily.com"
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://bantargebangtimes.com"
   ),
   openGraph: {
-    siteName: "Bantargebang Daily",
+    siteName: "Bantargebang Times",
     locale: "id_ID",
     type: "website",
   },

@@ -55,7 +55,7 @@ export default async function ArticlePage({ params }: Props) {
     author: article.author
       ? [{ "@type": "Person", name: article.author.name }]
       : [],
-    publisher: { "@type": "Organization", name: "Bantargebang Daily" },
+    publisher: { "@type": "Organization", name: "Bantargebang Times" },
   };
 
   return (

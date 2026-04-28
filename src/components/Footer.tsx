@@ -12,7 +12,7 @@ export default function Footer() {
               className="text-2xl font-bold mb-3"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              Bantargebang Daily
+              Bantargebang Times
             </h2>
             <div className="w-8 h-0.5 bg-[var(--color-brand-red)] mb-3" />
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -59,7 +59,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-600">
-          <p>© {year} Bantargebang Daily. Seluruh hak cipta dilindungi.</p>
+          <p>© {year} Bantargebang Times. Seluruh hak cipta dilindungi.</p>
           <p className="text-gray-700">Bantargebang, Bekasi</p>
         </div>
       </div>

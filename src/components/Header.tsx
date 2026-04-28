@@ -38,7 +38,7 @@ export default async function Header() {
               className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--color-brand-black)] group-hover:opacity-80 transition-opacity"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              Bantargebang Daily
+              Bantargebang Times
             </h1>
           </Link>
           <div className="flex items-center justify-center gap-3 mt-2.5">

@@ -31,7 +31,7 @@ export default function AdminSidebar({ name, role }: { name: string; role: strin
           className="text-base font-bold leading-tight"
           style={{ fontFamily: "var(--font-serif)" }}
         >
-          Bantargebang Daily
+          Bantargebang Times
         </p>
         <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">
           {ROLE_LABEL[role as Role] ?? "Admin"} Panel

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!category) return {};
   return {
     title: category.name,
-    description: `Kumpulan berita ${category.name} terbaru dari Bantargebang Daily.`,
+    description: `Kumpulan berita ${category.name} terbaru dari Bantargebang Times.`,
   };
 }
 

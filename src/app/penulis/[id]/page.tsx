@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!author) return {};
   return {
     title: author.name,
-    description: author.bio ?? `Artikel-artikel oleh ${author.name} di Bantargebang Daily.`,
+    description: author.bio ?? `Artikel-artikel oleh ${author.name} di Bantargebang Times.`,
   };
 }
 
