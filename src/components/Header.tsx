@@ -16,16 +16,25 @@ export default async function Header() {
 
   return (
     <header>
-      {/* Red accent stripe */}
-      <div className="h-[3px] bg-[var(--color-brand-red)]" />
-
-      {/* Top bar */}
-      <div className="bg-[var(--color-brand-black)] text-white">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between text-xs">
-          <span className="text-gray-400 tracking-wide">{formatHeaderDate()}</span>
-          <nav className="flex gap-5 text-gray-400">
-            <Link href="#" className="hover:text-white transition-colors tracking-wide">Tentang Kami</Link>
-            <Link href="#" className="hover:text-white transition-colors tracking-wide">Kontak</Link>
+      {/* Top utility bar */}
+      <div className="border-b border-[var(--color-border)]">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+          <span className="text-[11px] text-[var(--color-muted)] tracking-wide">
+            {formatHeaderDate()}
+          </span>
+          <nav className="flex gap-5">
+            <Link
+              href="#"
+              className="text-[11px] text-[var(--color-muted)] hover:text-[var(--color-brand-black)] transition-colors"
+            >
+              Tentang Kami
+            </Link>
+            <Link
+              href="#"
+              className="text-[11px] text-[var(--color-muted)] hover:text-[var(--color-brand-black)] transition-colors"
+            >
+              Kontak
+            </Link>
           </nav>
         </div>
       </div>
@@ -35,24 +44,24 @@ export default async function Header() {
         <div className="max-w-7xl mx-auto px-4 py-7 text-center">
           <Link href="/" className="inline-block group">
             <h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--color-brand-black)] group-hover:opacity-80 transition-opacity"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--color-brand-black)] group-hover:opacity-70 transition-opacity duration-200"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               Bantargebang Times
             </h1>
           </Link>
-          <div className="flex items-center justify-center gap-3 mt-2.5">
-            <div className="h-px w-16 bg-[var(--color-border)]" />
-            <p className="text-[10px] text-[var(--color-muted)] tracking-[0.2em] uppercase">
+          <div className="flex items-center justify-center gap-4 mt-2.5">
+            <div className="h-px w-14 bg-[var(--color-border)]" />
+            <p className="text-[10px] text-[var(--color-muted)] tracking-[0.25em] uppercase">
               Berita Terkini &middot; Akurat &middot; Terpercaya
             </p>
-            <div className="h-px w-16 bg-[var(--color-border)]" />
+            <div className="h-px w-14 bg-[var(--color-border)]" />
           </div>
         </div>
       </div>
 
       {/* Search bar */}
-      <div className="border-b border-[var(--color-border)] bg-[var(--color-subtle)]">
+      <div className="border-b border-[var(--color-border)] bg-white">
         <div className="max-w-7xl mx-auto px-4 py-2 flex justify-end">
           <SearchBar />
         </div>
@@ -65,7 +74,7 @@ export default async function Header() {
             <li>
               <Link
                 href="/"
-                className="block px-4 py-3 text-sm font-semibold text-[var(--color-brand-black)] hover:text-[var(--color-brand-red)] border-b-2 border-transparent hover:border-[var(--color-brand-red)] transition-colors whitespace-nowrap"
+                className="block px-4 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-brand-black)] border-b-2 border-[var(--color-brand-black)] whitespace-nowrap"
               >
                 Semua
               </Link>
@@ -74,7 +83,7 @@ export default async function Header() {
               <li key={cat.id}>
                 <Link
                   href={`/kategori/${cat.slug}`}
-                  className="block px-4 py-3 text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-brand-red)] border-b-2 border-transparent hover:border-[var(--color-brand-red)] transition-colors whitespace-nowrap"
+                  className="block px-4 py-3 text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--color-muted)] hover:text-[var(--color-brand-black)] border-b-2 border-transparent hover:border-[var(--color-brand-black)] transition-colors whitespace-nowrap"
                 >
                   {cat.name}
                 </Link>

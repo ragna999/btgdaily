@@ -4,11 +4,11 @@
   --font-serif: "Lora", "Georgia", "Times New Roman", serif;
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
 
-  --color-brand-black: #0a0a0a;
-  --color-brand-red: #c8102e;
-  --color-border: #e0e0e0;
-  --color-muted: #6b6b6b;
-  --color-subtle: #f7f7f7;
+  --color-brand-black: #121212;
+  --color-brand-red: #b52025;
+  --color-border: #d2d2d2;
+  --color-muted: #6e6e6e;
+  --color-subtle: #f8f8f8;
 }
 
 html {
@@ -20,7 +20,7 @@ html {
 }
 
 ::selection {
-  background-color: var(--color-brand-red);
+  background-color: var(--color-brand-black);
   color: #fff;
 }
 
@@ -29,29 +29,30 @@ html {
 }
 
 .prose-article {
-  font-size: 1.0625rem;
-  line-height: 1.85;
+  font-size: 1.125rem;
+  line-height: 1.9;
   font-family: "Georgia", serif;
-  color: #1c1c1c;
+  color: #1a1a1a;
 }
 
 .prose-article p {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.625rem;
 }
 
 .prose-article h2 {
-  font-size: 1.375rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-top: 2.25rem;
+  margin-top: 2.5rem;
   margin-bottom: 0.875rem;
   font-family: var(--font-serif);
   color: var(--color-brand-black);
+  letter-spacing: -0.01em;
 }
 
 .prose-article h3 {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-top: 1.75rem;
+  margin-top: 2rem;
   margin-bottom: 0.625rem;
   font-family: var(--font-serif);
   color: var(--color-brand-black);
@@ -70,13 +71,18 @@ html {
 }
 
 .prose-article li {
-  margin-bottom: 0.375rem;
+  margin-bottom: 0.5rem;
 }
 
 .prose-article a {
-  color: var(--color-brand-red);
+  color: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
+  text-decoration-color: var(--color-border);
+}
+
+.prose-article a:hover {
+  text-decoration-color: var(--color-brand-black);
 }
 
 .prose-article strong {
@@ -84,17 +90,18 @@ html {
 }
 
 .prose-article blockquote {
-  border-left: 3px solid var(--color-brand-red);
-  padding: 0.375rem 0 0.375rem 1.25rem;
-  margin: 2rem 0;
+  border-left: 2px solid var(--color-brand-black);
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  margin: 2.25rem 0;
   font-style: italic;
   color: var(--color-muted);
-  font-size: 1.05rem;
+  font-size: 1.125rem;
+  line-height: 1.75;
 }
 
 .prose-article img {
   max-width: 100%;
-  margin: 1.75rem 0;
+  margin: 2rem 0;
 }
 
 /* TipTap editor content styling */

@@ -9,12 +9,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
             <h2
-              className="text-2xl font-bold mb-3"
+              className="text-2xl font-bold mb-4"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               Bantargebang Times
             </h2>
-            <div className="w-8 h-0.5 bg-[var(--color-brand-red)] mb-3" />
             <p className="text-gray-400 text-sm leading-relaxed">
               Media berita lokal yang menyajikan informasi terkini seputar
               Bantargebang dan wilayah sekitarnya.
@@ -22,7 +21,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-widest mb-4 text-gray-300">
+            <h3 className="text-[11px] font-bold uppercase tracking-[0.15em] mb-4 text-gray-300">
               Navigasi
             </h3>
             <ul className="space-y-2.5 text-sm">
@@ -40,7 +39,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-widest mb-4 text-gray-300">
+            <h3 className="text-[11px] font-bold uppercase tracking-[0.15em] mb-4 text-gray-300">
               Tentang
             </h3>
             <ul className="space-y-2.5 text-sm">

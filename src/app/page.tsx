@@ -41,9 +41,9 @@ export default async function HomePage({ searchParams }: Props) {
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
         {/* Hero section — only on page 1 */}
         {page === 1 && heroArticle && (
-          <section className="border-b border-[var(--color-border)] pb-8 mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 lg:border-r lg:border-[var(--color-border)] lg:pr-6">
+          <section className="border-b border-[var(--color-border)] pb-10 mb-10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 lg:border-r lg:border-[var(--color-border)] lg:pr-8">
                 <ArticleCard article={heroArticle} variant="hero" />
               </div>
 
@@ -53,10 +53,9 @@ export default async function HomePage({ searchParams }: Props) {
                 ))}
 
                 {trending.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-[var(--color-border)]">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-1 h-4 bg-[var(--color-brand-red)]" />
-                      <h2 className="text-xs font-bold uppercase tracking-widest">
+                  <div className="mt-5 pt-5 border-t border-[var(--color-border)]">
+                    <div className="mb-3 pb-2 border-b-2 border-[var(--color-brand-black)]">
+                      <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
                         Trending
                       </h2>
                     </div>
@@ -64,10 +63,10 @@ export default async function HomePage({ searchParams }: Props) {
                       {trending.map((article, i) => (
                         <li
                           key={article.id}
-                          className="flex gap-3 items-start py-2 border-b border-[var(--color-border)] last:border-0"
+                          className="flex gap-3 items-start py-2.5 border-b border-[var(--color-border)] last:border-0"
                         >
                           <span
-                            className="text-2xl font-bold text-[var(--color-border)] leading-none shrink-0 w-5 mt-0.5"
+                            className="text-2xl font-bold text-[var(--color-border)] leading-none shrink-0 w-5 mt-0.5 select-none"
                             style={{ fontFamily: "var(--font-serif)" }}
                           >
                             {i + 1}
@@ -86,17 +85,10 @@ export default async function HomePage({ searchParams }: Props) {
         {/* Latest news grid */}
         {latest.length > 0 ? (
           <section>
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-1 h-5 bg-[var(--color-brand-red)]" />
-                <h2
-                  className="text-base font-bold uppercase tracking-widest"
-                  style={{ fontFamily: "var(--font-serif)" }}
-                >
-                  Berita Terbaru
-                </h2>
-              </div>
-              <div className="flex-1 h-px bg-[var(--color-border)]" />
+            <div className="mb-6 pb-2 border-b-2 border-[var(--color-brand-black)]">
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
+                Berita Terbaru
+              </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
               {latest.map((article) => (
