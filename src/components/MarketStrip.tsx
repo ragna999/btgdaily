@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { getMarketData, type KomoditasItem, type BbmItem } from "@/lib/market";
+import { getMarketData, type KomoditasItem, type BbmItem, type MetalItem } from "@/lib/market";
 
 function formatPrice(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(2)}jt`;
@@ -31,6 +31,23 @@ function BbmGroup({ items }: { items: BbmItem[] }) {
           {i > 0 && <span className="text-[var(--color-border)]">·</span>}
           <span className="text-[var(--color-muted)]">{item.name}</span>
           <span className="font-semibold">Rp{item.price.toLocaleString("id-ID")}</span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function MetalsGroup({ items }: { items: MetalItem[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="flex items-center gap-3">
+      <span className="font-bold uppercase tracking-[0.1em] text-[var(--color-muted)]">Logam</span>
+      {items.map((item, i) => (
+        <span key={item.name} className="flex items-center gap-1">
+          {i > 0 && <span className="text-[var(--color-border)]">·</span>}
+          <span className="text-[var(--color-muted)]">{item.name}</span>
+          <span className="font-semibold">Rp{formatPrice(item.priceIdr)}/g</span>
+          <Delta value={item.changePercent} isPercent />
         </span>
       ))}
     </div>
@@ -78,6 +95,13 @@ async function MarketData() {
             <span className="font-semibold">Rp{data.rupiah.value.toLocaleString("id-ID")}</span>
             <Delta value={data.rupiah.change} />
           </div>
+          <Divider />
+        </>
+      )}
+
+      {data.metals.length > 0 && (
+        <>
+          <MetalsGroup items={data.metals} />
           <Divider />
         </>
       )}

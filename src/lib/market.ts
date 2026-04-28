@@ -22,9 +22,16 @@ export type KomoditasItem = {
   unit: string;
 };
 
+export type MetalItem = {
+  name: string;
+  priceIdr: number; // per gram
+  changePercent: number;
+};
+
 export type MarketData = {
   ihsg: IhsgData | null;
   rupiah: RupiahData | null;
+  metals: MetalItem[];
   bbm: BbmItem[];
   komoditas: KomoditasItem[];
 };
@@ -104,6 +111,8 @@ async function fetchPihps(): Promise<KomoditasItem[]> {
   }
 }
 
+const TROY_OZ_TO_GRAM = 31.1035;
+
 const getCachedIhsg = unstable_cache(
   () => fetchYahooChart("^JKSE"),
   ["market-ihsg"],
@@ -116,16 +125,48 @@ const getCachedRupiah = unstable_cache(
   { revalidate: 300 }
 );
 
+const getCachedGold = unstable_cache(
+  () => fetchYahooChart("GC=F"),
+  ["market-gold"],
+  { revalidate: 300 }
+);
+
+const getCachedSilver = unstable_cache(
+  () => fetchYahooChart("SI=F"),
+  ["market-silver"],
+  { revalidate: 300 }
+);
+
 const getCachedKomoditas = unstable_cache(fetchPihps, ["market-komoditas"], {
   revalidate: 3600,
 });
 
 export async function getMarketData(): Promise<MarketData> {
-  const [ihsgRaw, rupiahRaw, komoditas] = await Promise.all([
+  const [ihsgRaw, rupiahRaw, goldRaw, silverRaw, komoditas] = await Promise.all([
     getCachedIhsg(),
     getCachedRupiah(),
+    getCachedGold(),
+    getCachedSilver(),
     getCachedKomoditas(),
   ]);
+
+  const usdIdr = rupiahRaw?.price ?? 0;
+
+  const metals: MetalItem[] = [];
+  if (goldRaw && usdIdr > 0) {
+    metals.push({
+      name: "Emas",
+      priceIdr: Math.round((goldRaw.price / TROY_OZ_TO_GRAM) * usdIdr),
+      changePercent: ((goldRaw.price - goldRaw.prevClose) / goldRaw.prevClose) * 100,
+    });
+  }
+  if (silverRaw && usdIdr > 0) {
+    metals.push({
+      name: "Perak",
+      priceIdr: Math.round((silverRaw.price / TROY_OZ_TO_GRAM) * usdIdr),
+      changePercent: ((silverRaw.price - silverRaw.prevClose) / silverRaw.prevClose) * 100,
+    });
+  }
 
   return {
     ihsg: ihsgRaw
@@ -141,6 +182,7 @@ export async function getMarketData(): Promise<MarketData> {
           change: rupiahRaw.price - rupiahRaw.prevClose,
         }
       : null,
+    metals,
     bbm: BBM_PRICES,
     komoditas,
   };
