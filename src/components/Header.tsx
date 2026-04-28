@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getCategories } from "@/lib/queries";
 import SearchBar from "./SearchBar";
+import MarketStrip from "./MarketStrip";
 
 function formatHeaderDate(): string {
   return new Date().toLocaleDateString("id-ID", {
@@ -66,6 +67,9 @@ export default async function Header() {
           <SearchBar />
         </div>
       </div>
+
+      {/* Market data strip */}
+      <MarketStrip />
 
       {/* Category nav */}
       <nav className="border-b border-[var(--color-border)] bg-white sticky top-0 z-50 shadow-sm">
