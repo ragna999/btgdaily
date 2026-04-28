@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { Lora } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
+const playfair = Playfair_Display({
+  variable: "--font-lora",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -30,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={`${geist.variable} ${lora.variable}`}>
+    <html lang="id" className={`${geist.variable} ${playfair.variable}`}>
       <body className="min-h-screen flex flex-col bg-white antialiased">
         {children}
       </body>
