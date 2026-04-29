@@ -6,6 +6,20 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import { formatDate, estimateReadTime } from "@/lib/utils";
 import { publishArticle, returnToDraft } from "@/app/actions/articles";
 
+type ArticleRow = {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string | null;
+  thumbnail_url: string | null;
+  status: string;
+  created_at: string;
+  published_at: string | null;
+  author: { name: string; avatar_url: string | null } | null;
+  category: { name: string; slug: string } | null;
+};
+
 type Props = { params: Promise<{ id: string }> };
 
 export default async function ArticlePreviewPage({ params }: Props) {
@@ -25,9 +39,10 @@ export default async function ArticlePreviewPage({ params }: Props) {
 
   if (error || !data) notFound();
 
-  const author = data.author as unknown as { name: string; avatar_url: string | null } | null;
-  const category = data.category as unknown as { name: string; slug: string } | null;
-  const readTime = estimateReadTime(data.content);
+  const row = data as unknown as ArticleRow;
+  const author = row.author;
+  const category = row.category;
+  const readTime = estimateReadTime(row.content);
 
   const STATUS_LABEL: Record<string, string> = {
     draft: "Draft",
@@ -54,15 +69,15 @@ export default async function ArticlePreviewPage({ params }: Props) {
               ← Antrian Review
             </Link>
             <span
-              className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full shrink-0 ${STATUS_COLOR[data.status] ?? ""}`}
+              className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full shrink-0 ${STATUS_COLOR[row.status] ?? ""}`}
             >
-              {STATUS_LABEL[data.status] ?? data.status}
+              {STATUS_LABEL[row.status] ?? row.status}
             </span>
           </div>
 
-          {data.status === "review" && (
+          {row.status === "review" && (
             <div className="flex items-center gap-2 shrink-0">
-              <form action={returnToDraft.bind(null, data.id)}>
+              <form action={returnToDraft.bind(null, row.id)}>
                 <button
                   type="submit"
                   className="text-xs font-semibold px-3 py-1.5 border border-gray-600 hover:border-gray-400 transition-colors"
@@ -70,7 +85,7 @@ export default async function ArticlePreviewPage({ params }: Props) {
                   Kembalikan ke Draft
                 </button>
               </form>
-              <form action={publishArticle.bind(null, data.id)}>
+              <form action={publishArticle.bind(null, row.id)}>
                 <button
                   type="submit"
                   className="text-xs font-semibold px-3 py-1.5 bg-white text-[var(--color-brand-black)] hover:bg-gray-200 transition-colors"
@@ -96,7 +111,7 @@ export default async function ArticlePreviewPage({ params }: Props) {
             className="text-3xl md:text-4xl font-bold leading-tight mb-5"
             style={{ fontFamily: "var(--font-serif)" }}
           >
-            {data.title}
+            {row.title}
           </h1>
 
           <div className="pb-5 border-b border-[var(--color-border)] mb-6 space-y-1">
@@ -109,23 +124,23 @@ export default async function ArticlePreviewPage({ params }: Props) {
               </p>
             )}
             <p className="text-xs text-[var(--color-muted)]">
-              {formatDate(data.published_at ?? data.created_at)}
+              {formatDate(row.published_at ?? row.created_at)}
               {" · "}
               {readTime} menit baca
             </p>
           </div>
 
-          {data.excerpt && (
+          {row.excerpt && (
             <p className="text-base text-[var(--color-muted)] italic border-l-2 border-[var(--color-border)] pl-4 mb-6">
-              {data.excerpt}
+              {row.excerpt}
             </p>
           )}
 
-          {data.thumbnail_url && (
+          {row.thumbnail_url && (
             <div className="relative aspect-[16/9] w-full mb-8 overflow-hidden">
               <Image
-                src={data.thumbnail_url}
-                alt={data.title}
+                src={row.thumbnail_url}
+                alt={row.title}
                 fill
                 className="object-cover"
                 priority
@@ -135,7 +150,7 @@ export default async function ArticlePreviewPage({ params }: Props) {
 
           <div
             className="prose-article"
-            dangerouslySetInnerHTML={{ __html: data.content }}
+            dangerouslySetInnerHTML={{ __html: row.content }}
           />
         </div>
       </main>
