@@ -12,14 +12,15 @@ export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 12;
 
-type Props = {
-  searchParams: Promise<{ page?: string }>;
-};
+type Props = { searchParams: Promise<{ page?: string }> };
 
-function SectionRule({ title }: { title: string }) {
+function SectionLabel({ title }: { title: string }) {
   return (
-    <div className="border-t-2 border-[var(--color-brand-black)] pt-2 pb-1.5 border-b border-[var(--color-border)] mb-5">
-      <h2 className="text-[10px] font-bold uppercase tracking-[0.2em]">{title}</h2>
+    <div className="flex items-center gap-3 mb-4 border-t-2 border-[var(--color-brand-black)] pt-2">
+      <span className="text-[10px] font-bold uppercase tracking-[0.2em] whitespace-nowrap shrink-0">
+        {title}
+      </span>
+      <div className="flex-1 border-b border-[var(--color-border)]" />
     </div>
   );
 }
@@ -36,82 +37,115 @@ export default async function HomePage({ searchParams }: Props) {
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  const heroArticle = page === 1 ? (featured[0] ?? latest[0]) : null;
-  const heroId = heroArticle?.id ?? -1;
+  // Zone 1 — hero (left) + sidebar articles (right)
+  const mainHero = page === 1 ? (featured[0] ?? latest[0]) : null;
+  const heroId = mainHero?.id ?? -1;
+  const trendingIds = new Set(trending.map((a) => a.id));
 
-  const midArticles =
-    page === 1 ? featured.filter((a) => a.id !== heroId).slice(0, 3) : [];
+  // Sidebar: up to 4 articles stacked beside the hero
+  // prefer featured (non-hero), then latest — exclude trending to avoid overlap
+  const sidebarArticles =
+    page === 1
+      ? [
+          ...featured.filter((a) => a.id !== heroId),
+          ...latest.filter(
+            (a) =>
+              a.id !== heroId &&
+              !trendingIds.has(a.id) &&
+              !featured.some((f) => f.id === a.id)
+          ),
+        ].slice(0, 4)
+      : [];
 
-  const usedIds = new Set(featured.map((a) => a.id));
-  usedIds.add(heroId);
-  const gridArticles = latest.filter((a) => !usedIds.has(a.id));
+  // Zone 2 — 4-col equal row below the hero block
+  const usedZone1 = new Set([heroId, ...sidebarArticles.map((a) => a.id)]);
+  const zone2Articles =
+    page === 1
+      ? latest
+          .filter((a) => !usedZone1.has(a.id) && !trendingIds.has(a.id))
+          .slice(0, 4)
+      : [];
+
+  // Zone 3 — dense latest grid
+  const usedAll = new Set([...usedZone1, ...zone2Articles.map((a) => a.id)]);
+  const gridArticles = latest.filter((a) => !usedAll.has(a.id));
 
   return (
     <>
       <Header />
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
 
-        {/* ── Zone 1: Hero + Trending sidebar ── */}
-        {page === 1 && heroArticle && (
+        {/* ── Zone 1: Hero (left 4 cols) + Sidebar (right 2 cols) ── */}
+        {page === 1 && mainHero && (
           <section className="border-b border-[var(--color-border)] pb-8 mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+            <div className="grid grid-cols-1 lg:grid-cols-6 gap-0">
 
-              <div className="lg:col-span-7 lg:pr-8 lg:border-r lg:border-[var(--color-border)]">
-                <ArticleCard article={heroArticle} variant="hero" />
+              {/* Hero */}
+              <div className="lg:col-span-4 lg:pr-8 lg:border-r border-[var(--color-border)] pb-6 lg:pb-0 border-b lg:border-b-0">
+                <ArticleCard article={mainHero} variant="hero" />
               </div>
 
-              {trending.length > 0 && (
-                <div className="lg:col-span-5 lg:pl-8 mt-8 lg:mt-0 border-t lg:border-t-0 border-[var(--color-border)] pt-6 lg:pt-0">
-                  <SectionRule title="Trending" />
-                  <ol>
-                    {trending.map((article, i) => (
-                      <li
-                        key={article.id}
-                        className="flex gap-3 items-start py-3 border-b border-[var(--color-border)] last:border-0"
-                      >
-                        <span
-                          className="text-xl font-bold text-[var(--color-border)] leading-none shrink-0 w-5 mt-0.5 select-none"
-                          style={{ fontFamily: "var(--font-serif)" }}
-                        >
-                          {i + 1}
-                        </span>
-                        <ArticleCard article={article} variant="compact" />
-                      </li>
-                    ))}
-                  </ol>
+              {/* Sidebar — stacked articles */}
+              <div className="lg:col-span-2 lg:pl-6 pt-6 lg:pt-0">
+                <SectionLabel title="Berita Pilihan" />
+                <div>
+                  {sidebarArticles.map((article) => (
+                    <div
+                      key={article.id}
+                      className="py-3 border-b border-[var(--color-border)] last:border-0"
+                    >
+                      <ArticleCard article={article} variant="newspaper" />
+                    </div>
+                  ))}
                 </div>
-              )}
+
+                {/* Trending below sidebar articles */}
+                {trending.length > 0 && (
+                  <div className="mt-5 pt-5 border-t border-[var(--color-border)]">
+                    <SectionLabel title="Trending" />
+                    <ol>
+                      {trending.slice(0, 4).map((article, i) => (
+                        <li
+                          key={article.id}
+                          className="flex gap-2.5 py-2.5 border-b border-[var(--color-border)] last:border-0"
+                        >
+                          <span
+                            className="text-lg font-bold text-[var(--color-border)] leading-none shrink-0 w-4 mt-0.5 select-none"
+                            style={{ fontFamily: "var(--font-serif)" }}
+                          >
+                            {i + 1}
+                          </span>
+                          <ArticleCard article={article} variant="compact" />
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
+              </div>
             </div>
           </section>
         )}
 
-        {/* ── Zone 2: Sorotan (3-col, newspaper variant) ── */}
-        {page === 1 && midArticles.length > 0 && (
+        {/* ── Zone 2: 4-col equal story row ── */}
+        {page === 1 && zone2Articles.length > 0 && (
           <section className="border-b border-[var(--color-border)] pb-8 mb-8">
-            <SectionRule title="Sorotan" />
+            <SectionLabel title="Sorotan" />
             <div
-              className={`grid grid-cols-1 md:divide-x divide-[var(--color-border)] ${
-                midArticles.length >= 3
+              className={`grid grid-cols-1 ${
+                zone2Articles.length >= 4
+                  ? "md:grid-cols-4"
+                  : zone2Articles.length === 3
                   ? "md:grid-cols-3"
-                  : midArticles.length === 2
-                  ? "md:grid-cols-2"
-                  : "md:grid-cols-1"
+                  : "md:grid-cols-2"
               }`}
             >
-              {midArticles.map((article, i) => (
+              {zone2Articles.map((article, i) => (
                 <div
                   key={article.id}
-                  className={`${
-                    i === 0
-                      ? "md:pr-6"
-                      : i === midArticles.length - 1
-                      ? "md:pl-6"
-                      : "md:px-6"
-                  } ${
-                    i > 0
-                      ? "pt-6 md:pt-0 border-t md:border-t-0 border-[var(--color-border)]"
-                      : ""
-                  }`}
+                  className={[
+                    i === 0 ? "md:pr-5" : i === zone2Articles.length - 1 ? "md:pl-5" : "md:px-5",
+                    i > 0 ? "md:border-l border-t md:border-t-0 border-[var(--color-border)] pt-5 md:pt-0" : "",
+                  ].join(" ")}
                 >
                   <ArticleCard article={article} variant="newspaper" />
                 </div>
@@ -120,15 +154,15 @@ export default async function HomePage({ searchParams }: Props) {
           </section>
         )}
 
-        {/* ── Zone 3: Berita Terbaru (CSS columns, newspaper style) ── */}
+        {/* ── Zone 3: Dense latest grid ── */}
         {gridArticles.length > 0 ? (
           <section>
-            <SectionRule title="Berita Terbaru" />
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-x-8">
+            <SectionLabel title="Berita Terbaru" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6">
               {gridArticles.map((article) => (
                 <div
                   key={article.id}
-                  className="break-inside-avoid border-b border-[var(--color-border)] py-4"
+                  className="border-b border-[var(--color-border)] py-4"
                 >
                   <ArticleCard article={article} variant="newspaper" />
                 </div>
