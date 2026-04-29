@@ -32,7 +32,7 @@ export default async function EditArticlePage({ params }: Props) {
   const selectedTagIds = await getArticleTagIds(article.id);
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-4 md:p-8 max-w-3xl">
       <div className="flex items-center gap-3 mb-6">
         <Link
           href="/admin/articles"

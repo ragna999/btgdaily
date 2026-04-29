@@ -9,7 +9,7 @@ export default async function NewArticlePage() {
   const [categories, tags] = await Promise.all([getCategories(), getTags()]);
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-4 md:p-8 max-w-3xl">
       <div className="flex items-center gap-3 mb-6">
         <Link
           href="/admin/articles"

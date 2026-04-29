@@ -26,7 +26,7 @@ export default async function ProfilePage() {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <h1
         className="text-2xl font-bold mb-2"
         style={{ fontFamily: "var(--font-serif)" }}

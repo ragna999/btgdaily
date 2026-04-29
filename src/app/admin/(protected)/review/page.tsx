@@ -19,7 +19,7 @@ export default async function ReviewPage() {
     .order("created_at", { ascending: true });
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <div className="mb-6">
         <h1
           className="text-2xl font-bold mb-1"

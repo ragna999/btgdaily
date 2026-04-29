@@ -25,7 +25,7 @@ export default async function EditUserPage({ params }: Props) {
   const boundUpdate = updateUser.bind(null, user.id);
 
   return (
-    <div className="p-8 max-w-xl">
+    <div className="p-4 md:p-8 max-w-xl">
       <div className="flex items-center gap-3 mb-6">
         <Link href="/admin/users" className="text-xs text-[var(--color-muted)] hover:text-[var(--color-brand-black)]">
           ← Kembali
