@@ -38,14 +38,14 @@ export default function ArticleCard({ article, variant = "default" }: Props) {
         )}
         <Link href={`/berita/${article.slug}`}>
           <h2
-            className="text-3xl md:text-4xl font-bold leading-tight mt-2 mb-3 group-hover:underline decoration-1 underline-offset-4"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mt-2 mb-3 group-hover:underline decoration-1 underline-offset-4"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {article.title}
           </h2>
         </Link>
         {article.excerpt && (
-          <p className="text-[var(--color-muted)] text-[15px] leading-relaxed line-clamp-3 mb-4">
+          <p className="text-[var(--color-muted)] text-base leading-relaxed line-clamp-4 mb-4">
             {article.excerpt}
           </p>
         )}

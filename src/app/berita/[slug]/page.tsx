@@ -93,23 +93,30 @@ export default async function ArticlePage({ params }: Props) {
             )}
 
             <h1
-              className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-4"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-5"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               {article.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--color-muted)] pb-5 border-b border-[var(--color-border)] mb-6">
+            <div className="pb-5 border-b border-[var(--color-border)] mb-6 space-y-1">
               {article.author && (
-                <span className="font-semibold text-[var(--color-brand-black)]">
-                  {article.author.name}
-                </span>
+                <p className="text-sm">
+                  <span className="text-[10px] text-[var(--color-muted)] uppercase tracking-[0.12em] mr-1.5">
+                    Oleh
+                  </span>
+                  <span className="font-semibold">{article.author.name}</span>
+                </p>
               )}
-              <time dateTime={article.published_at}>
-                {formatDate(article.published_at)}
-              </time>
-              <span>{readTime} menit baca</span>
-              <span>{article.article_metrics?.views ?? 0} tayangan</span>
+              <p className="text-xs text-[var(--color-muted)]">
+                <time dateTime={article.published_at}>
+                  {formatDate(article.published_at)}
+                </time>
+                {" · "}
+                {readTime} menit baca
+                {" · "}
+                {article.article_metrics?.views ?? 0} tayangan
+              </p>
             </div>
 
             {article.thumbnail_url && (
@@ -181,11 +188,10 @@ export default async function ArticlePage({ params }: Props) {
           {related.length > 0 && (
             <aside className="lg:col-span-1">
               <div className="sticky top-20">
-                <div className="flex items-center gap-3 mb-4">
-                  <h2 className="text-sm font-bold uppercase tracking-widest whitespace-nowrap">
+                <div className="border-t-2 border-[var(--color-brand-black)] pt-1.5 mb-5">
+                  <h2 className="text-[10px] font-bold uppercase tracking-[0.2em]">
                     Berita Terkait
                   </h2>
-                  <div className="flex-1 h-px bg-[var(--color-border)]" />
                 </div>
                 <div className="space-y-0">
                   {related.map((rel) => (

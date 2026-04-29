@@ -104,6 +104,15 @@ html {
   margin: 2rem 0;
 }
 
+/* Scrollbar hide */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* TipTap editor content styling */
 .tiptap p { margin-bottom: 1rem; }
 .tiptap h2 { font-size: 1.375rem; font-weight: 700; margin: 1.5rem 0 0.5rem; font-family: var(--font-serif); }

@@ -45,18 +45,20 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     <>
       <Header />
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
-        <div className="border-b-2 border-[var(--color-brand-black)] pb-3 mb-8">
-          <p className="text-xs font-bold uppercase tracking-widest text-[var(--color-muted)] mb-1">
+        <div className="border-t-2 border-[var(--color-brand-black)] pt-1.5 mb-8">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)] mb-3">
             Kategori
           </p>
           <h1
-            className="text-3xl font-bold"
+            className="text-4xl md:text-5xl font-bold leading-tight"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {category.name}
           </h1>
           {total > 0 && (
-            <p className="text-sm text-[var(--color-muted)] mt-1">{total} artikel</p>
+            <p className="text-sm text-[var(--color-muted)] mt-2 border-t border-[var(--color-border)] pt-2">
+              {total} artikel
+            </p>
           )}
         </div>
 
@@ -76,9 +78,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
         {gridArticles.length > 0 && (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6">
               {gridArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
+                <div key={article.id} className="border-b border-[var(--color-border)] py-5">
+                  <ArticleCard article={article} variant="newspaper" />
+                </div>
               ))}
             </div>
             <Pagination

@@ -42,22 +42,22 @@ export default async function Header() {
 
       {/* Masthead */}
       <div className="border-b-2 border-[var(--color-brand-black)]">
-        <div className="max-w-7xl mx-auto px-4 py-4 md:py-7 text-center">
+        <div className="max-w-7xl mx-auto px-4 py-5 md:py-8 text-center">
+          <div className="flex items-center justify-center gap-4 mb-3">
+            <div className="flex-1 border-t border-[var(--color-border)]" />
+            <p className="text-[9px] text-[var(--color-muted)] tracking-[0.25em] uppercase whitespace-nowrap">
+              Berita Terkini &middot; Akurat &middot; Terpercaya
+            </p>
+            <div className="flex-1 border-t border-[var(--color-border)]" />
+          </div>
           <Link href="/" className="inline-block group">
             <h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--color-brand-black)] group-hover:opacity-70 transition-opacity duration-200"
+              className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[var(--color-brand-black)] group-hover:opacity-75 transition-opacity duration-200"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               Bantargebang Times
             </h1>
           </Link>
-          <div className="flex items-center justify-center gap-3 mt-2">
-            <div className="h-px w-10 sm:w-14 bg-[var(--color-border)]" />
-            <p className="text-[10px] text-[var(--color-muted)] tracking-[0.2em] uppercase">
-              Berita Terkini &middot; Akurat &middot; Terpercaya
-            </p>
-            <div className="h-px w-10 sm:w-14 bg-[var(--color-border)]" />
-          </div>
         </div>
       </div>
 

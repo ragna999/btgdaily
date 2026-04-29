@@ -16,11 +16,10 @@ type Props = { searchParams: Promise<{ page?: string }> };
 
 function SectionLabel({ title }: { title: string }) {
   return (
-    <div className="flex items-center gap-3 mb-4 border-t-2 border-[var(--color-brand-black)] pt-2">
-      <span className="text-[10px] font-bold uppercase tracking-[0.2em] whitespace-nowrap shrink-0">
+    <div className="border-t-2 border-[var(--color-brand-black)] pt-1.5 mb-5">
+      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-brand-black)]">
         {title}
       </span>
-      <div className="flex-1 border-b border-[var(--color-border)]" />
     </div>
   );
 }
@@ -30,76 +29,122 @@ export default async function HomePage({ searchParams }: Props) {
   const page = Math.max(1, Number(pageParam) || 1);
 
   const [featured, { articles: latest, total }, trending] = await Promise.all([
-    getFeaturedArticles(4),
+    getFeaturedArticles(6),
     getLatestArticlesPaged(page, PAGE_SIZE),
     page === 1 ? getTrendingArticles(5) : Promise.resolve([]),
   ]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  // Zone 1 — hero + trending sidebar (trending is a separate query, doesn't deplete latest)
+  // Zone 1 — hero
   const mainHero = page === 1 ? (featured[0] ?? latest[0]) : null;
   const heroId = mainHero?.id ?? -1;
 
-  // Zone 2 — Sorotan: only featured non-hero articles (optional section)
+  // Zone 1 right — secondary stories beside hero
+  const secondaryArticles =
+    page === 1 ? featured.filter((a) => a.id !== heroId).slice(0, 2) : [];
+  const secondaryIds = new Set(secondaryArticles.map((a) => a.id));
+
+  // Zone 3 — Sorotan: remaining featured
   const sorotanArticles =
-    page === 1 ? featured.filter((a) => a.id !== heroId).slice(0, 4) : [];
+    page === 1
+      ? featured
+          .filter((a) => a.id !== heroId && !secondaryIds.has(a.id))
+          .slice(0, 4)
+      : [];
   const sorotanIds = new Set(sorotanArticles.map((a) => a.id));
 
-  // Zone 3 — all latest except hero and sorotan
+  // Zone 4 — Latest grid
   const gridArticles = latest.filter(
-    (a) => a.id !== heroId && !sorotanIds.has(a.id)
+    (a) => a.id !== heroId && !secondaryIds.has(a.id) && !sorotanIds.has(a.id)
   );
+
+  const trendingCount = Math.min(trending.length, 5);
+  const trendingGridCols =
+    trendingCount >= 5
+      ? "sm:grid-cols-5"
+      : trendingCount === 4
+      ? "sm:grid-cols-4"
+      : trendingCount === 3
+      ? "sm:grid-cols-3"
+      : "sm:grid-cols-2";
 
   return (
     <>
       <Header />
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
 
-        {/* ── Zone 1: Hero (left 4 cols) + Sidebar (right 2 cols) ── */}
+        {/* ── Zone 1: Hero + Secondary Stories ── */}
         {page === 1 && mainHero && (
           <section className="border-b border-[var(--color-border)] pb-8 mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-6 gap-0">
-
-              {/* Hero */}
-              <div className="lg:col-span-4 lg:pr-8 lg:border-r border-[var(--color-border)] pb-6 lg:pb-0 border-b lg:border-b-0">
+            <SectionLabel title="Berita Utama" />
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+              {/* Hero — left */}
+              <div
+                className={[
+                  secondaryArticles.length > 0
+                    ? "lg:col-span-3 lg:pr-8 lg:border-r"
+                    : "lg:col-span-5",
+                  "pb-6 lg:pb-0 border-b lg:border-b-0 border-[var(--color-border)]",
+                ].join(" ")}
+              >
                 <ArticleCard article={mainHero} variant="hero" />
               </div>
 
-              {/* Sidebar — trending list */}
-              <div className="lg:col-span-2 lg:pl-6 pt-6 lg:pt-0">
-                {trending.length > 0 && (
-                  <>
-                    <SectionLabel title="Trending" />
-                    <ol>
-                      {trending.slice(0, 5).map((article, i) => (
-                        <li
-                          key={article.id}
-                          className="flex gap-2.5 py-2.5 border-b border-[var(--color-border)] last:border-0"
-                        >
-                          <span
-                            className="text-lg font-bold text-[var(--color-border)] leading-none shrink-0 w-4 mt-0.5 select-none"
-                            style={{ fontFamily: "var(--font-serif)" }}
-                          >
-                            {i + 1}
-                          </span>
-                          <ArticleCard article={article} variant="compact" />
-                        </li>
-                      ))}
-                    </ol>
-                  </>
-                )}
-              </div>
+              {/* Secondary stories — right */}
+              {secondaryArticles.length > 0 && (
+                <div className="lg:col-span-2 lg:pl-8 pt-6 lg:pt-0 flex flex-col divide-y divide-[var(--color-border)]">
+                  {secondaryArticles.map((article) => (
+                    <div
+                      key={article.id}
+                      className="py-5 first:pt-0 last:pb-0"
+                    >
+                      <ArticleCard article={article} variant="mid" />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
         )}
 
-        {/* ── Zone 2: Sorotan (featured non-hero, optional) ── */}
+        {/* ── Zone 2: Trending horizontal numbered strip ── */}
+        {page === 1 && trending.length > 0 && (
+          <section className="border-b border-[var(--color-border)] pb-8 mb-8">
+            <SectionLabel title="Trending" />
+            <div className={`grid grid-cols-1 ${trendingGridCols} gap-0`}>
+              {trending.slice(0, 5).map((article, i) => (
+                <div
+                  key={article.id}
+                  className={[
+                    "flex items-start gap-3 py-4 sm:py-0",
+                    i > 0
+                      ? "border-t sm:border-t-0 sm:border-l border-[var(--color-border)] sm:pl-5 pt-4 sm:pt-0"
+                      : "",
+                    i < trendingCount - 1 ? "sm:pr-5" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                >
+                  <span
+                    className="text-3xl font-bold text-[var(--color-border)] leading-none select-none shrink-0 mt-0.5"
+                    style={{ fontFamily: "var(--font-serif)" }}
+                  >
+                    {i + 1}
+                  </span>
+                  <ArticleCard article={article} variant="compact" />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── Zone 3: Sorotan ── */}
         {page === 1 && sorotanArticles.length > 0 && (
           <section className="border-b border-[var(--color-border)] pb-8 mb-8">
             <SectionLabel title="Sorotan" />
             <div
-              className={`grid grid-cols-1 ${
+              className={`grid grid-cols-1 gap-0 ${
                 sorotanArticles.length >= 4
                   ? "md:grid-cols-4"
                   : sorotanArticles.length === 3
@@ -111,18 +156,23 @@ export default async function HomePage({ searchParams }: Props) {
                 <div
                   key={article.id}
                   className={[
-                    i === 0 ? "md:pr-5" : i === sorotanArticles.length - 1 ? "md:pl-5" : "md:px-5",
-                    i > 0 ? "md:border-l border-t md:border-t-0 border-[var(--color-border)] pt-5 md:pt-0" : "",
-                  ].join(" ")}
+                    "py-5 md:py-0",
+                    i > 0
+                      ? "border-t md:border-t-0 md:border-l border-[var(--color-border)] md:pl-5 pt-5 md:pt-0"
+                      : "",
+                    i < sorotanArticles.length - 1 ? "md:pr-5" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                 >
-                  <ArticleCard article={article} variant="newspaper" />
+                  <ArticleCard article={article} variant="mid" />
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* ── Zone 3: Dense latest grid ── */}
+        {/* ── Zone 4: Latest grid ── */}
         {gridArticles.length > 0 ? (
           <section>
             <SectionLabel title="Berita Terbaru" />
@@ -130,13 +180,17 @@ export default async function HomePage({ searchParams }: Props) {
               {gridArticles.map((article) => (
                 <div
                   key={article.id}
-                  className="border-b border-[var(--color-border)] py-4"
+                  className="border-b border-[var(--color-border)] py-5"
                 >
                   <ArticleCard article={article} variant="newspaper" />
                 </div>
               ))}
             </div>
-            <Pagination currentPage={page} totalPages={totalPages} basePath="/" />
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              basePath="/"
+            />
           </section>
         ) : (
           latest.length === 0 && (
