@@ -5,7 +5,7 @@ import type { Article } from "@/lib/types";
 
 interface Props {
   article: Article;
-  variant?: "default" | "hero" | "compact" | "side" | "mid";
+  variant?: "default" | "hero" | "compact" | "side" | "mid" | "newspaper";
 }
 
 export default function ArticleCard({ article, variant = "default" }: Props) {
@@ -58,6 +58,54 @@ export default function ArticleCard({ article, variant = "default" }: Props) {
           {author && <span>·</span>}
           <time dateTime={article.published_at}>{formatDate(article.published_at)}</time>
         </div>
+      </article>
+    );
+  }
+
+  if (variant === "newspaper") {
+    return (
+      <article className="group">
+        {article.thumbnail_url && (
+          <Link href={`/berita/${article.slug}`} className="block overflow-hidden mb-2">
+            <div className="relative h-36 w-full bg-[var(--color-subtle)]">
+              <Image
+                src={article.thumbnail_url}
+                alt={article.title}
+                fill
+                className="object-cover"
+              />
+            </div>
+          </Link>
+        )}
+        {category && (
+          <Link href={`/kategori/${category.slug}`}>
+            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-brand-red)]">
+              {category.name}
+            </span>
+          </Link>
+        )}
+        <Link href={`/berita/${article.slug}`}>
+          <h3
+            className="font-bold leading-tight mt-0.5 mb-1.5 group-hover:underline decoration-1 underline-offset-2 line-clamp-3"
+            style={{ fontFamily: "var(--font-serif)", fontSize: "1rem" }}
+          >
+            {article.title}
+          </h3>
+        </Link>
+        {article.excerpt && (
+          <p className="text-[13px] text-[var(--color-muted)] leading-snug line-clamp-2 mb-1.5">
+            {article.excerpt}
+          </p>
+        )}
+        <p className="text-[10px] text-[var(--color-muted)]">
+          {author && (
+            <span className="font-semibold text-[var(--color-brand-black)]">
+              {author.name}
+            </span>
+          )}
+          {author && " · "}
+          <time dateTime={article.published_at}>{formatDate(article.published_at)}</time>
+        </p>
       </article>
     );
   }

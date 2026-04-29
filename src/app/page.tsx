@@ -16,6 +16,14 @@ type Props = {
   searchParams: Promise<{ page?: string }>;
 };
 
+function SectionRule({ title }: { title: string }) {
+  return (
+    <div className="border-t-2 border-[var(--color-brand-black)] pt-2 pb-1.5 border-b border-[var(--color-border)] mb-5">
+      <h2 className="text-[10px] font-bold uppercase tracking-[0.2em]">{title}</h2>
+    </div>
+  );
+}
+
 export default async function HomePage({ searchParams }: Props) {
   const { page: pageParam } = await searchParams;
   const page = Math.max(1, Number(pageParam) || 1);
@@ -28,15 +36,12 @@ export default async function HomePage({ searchParams }: Props) {
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  // Hero: top featured, or fall back to latest[0]
   const heroArticle = page === 1 ? (featured[0] ?? latest[0]) : null;
   const heroId = heroArticle?.id ?? -1;
 
-  // Sorotan row: only from featured (non-hero), max 3
   const midArticles =
     page === 1 ? featured.filter((a) => a.id !== heroId).slice(0, 3) : [];
 
-  // Grid: latest articles, excluding any that already appear in featured zones
   const usedIds = new Set(featured.map((a) => a.id));
   usedIds.add(heroId);
   const gridArticles = latest.filter((a) => !usedIds.has(a.id));
@@ -51,19 +56,13 @@ export default async function HomePage({ searchParams }: Props) {
           <section className="border-b border-[var(--color-border)] pb-8 mb-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
 
-              {/* Hero */}
-              <div className="lg:col-span-8 lg:pr-8 lg:border-r lg:border-[var(--color-border)]">
+              <div className="lg:col-span-7 lg:pr-8 lg:border-r lg:border-[var(--color-border)]">
                 <ArticleCard article={heroArticle} variant="hero" />
               </div>
 
-              {/* Trending sidebar */}
               {trending.length > 0 && (
-                <div className="lg:col-span-4 lg:pl-8 mt-8 lg:mt-0 border-t lg:border-t-0 border-[var(--color-border)] pt-6 lg:pt-0">
-                  <div className="border-t-4 border-[var(--color-brand-red)] pt-3 mb-1">
-                    <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
-                      Trending
-                    </h2>
-                  </div>
+                <div className="lg:col-span-5 lg:pl-8 mt-8 lg:mt-0 border-t lg:border-t-0 border-[var(--color-border)] pt-6 lg:pt-0">
+                  <SectionRule title="Trending" />
                   <ol>
                     {trending.map((article, i) => (
                       <li
@@ -71,7 +70,7 @@ export default async function HomePage({ searchParams }: Props) {
                         className="flex gap-3 items-start py-3 border-b border-[var(--color-border)] last:border-0"
                       >
                         <span
-                          className="text-2xl font-bold text-[var(--color-border)] leading-none shrink-0 w-5 mt-0.5 select-none"
+                          className="text-xl font-bold text-[var(--color-border)] leading-none shrink-0 w-5 mt-0.5 select-none"
                           style={{ fontFamily: "var(--font-serif)" }}
                         >
                           {i + 1}
@@ -86,14 +85,10 @@ export default async function HomePage({ searchParams }: Props) {
           </section>
         )}
 
-        {/* ── Zone 2: Sorotan (mid row, 3 cols with dividers) ── */}
+        {/* ── Zone 2: Sorotan (3-col, newspaper variant) ── */}
         {page === 1 && midArticles.length > 0 && (
           <section className="border-b border-[var(--color-border)] pb-8 mb-8">
-            <div className="border-t-4 border-[var(--color-brand-black)] pt-3 mb-6">
-              <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
-                Sorotan
-              </h2>
-            </div>
+            <SectionRule title="Sorotan" />
             <div
               className={`grid grid-cols-1 md:divide-x divide-[var(--color-border)] ${
                 midArticles.length >= 3
@@ -118,24 +113,25 @@ export default async function HomePage({ searchParams }: Props) {
                       : ""
                   }`}
                 >
-                  <ArticleCard article={article} variant="mid" />
+                  <ArticleCard article={article} variant="newspaper" />
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* ── Zone 3: Latest grid ── */}
+        {/* ── Zone 3: Berita Terbaru (CSS columns, newspaper style) ── */}
         {gridArticles.length > 0 ? (
           <section>
-            <div className="border-t-4 border-[var(--color-brand-black)] pt-3 mb-6">
-              <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
-                Berita Terbaru
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
+            <SectionRule title="Berita Terbaru" />
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-x-8">
               {gridArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
+                <div
+                  key={article.id}
+                  className="break-inside-avoid border-b border-[var(--color-border)] py-4"
+                >
+                  <ArticleCard article={article} variant="newspaper" />
+                </div>
               ))}
             </div>
             <Pagination currentPage={page} totalPages={totalPages} basePath="/" />
