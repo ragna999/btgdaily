@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { verifySession } from "@/lib/dal";
 import { getCategories, getTags, getArticleTagIds } from "@/lib/queries";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin as supabase } from "@/lib/supabase-admin";
 import ArticleForm from "@/components/admin/ArticleForm";
 import { updateArticle } from "@/app/actions/articles";
 import type { Article } from "@/lib/types";
