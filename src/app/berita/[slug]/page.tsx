@@ -22,6 +22,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = await getArticleBySlug(slug);
   if (!article) return {};
 
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
+  const ogImage = article.thumbnail_url
+    ? `${siteUrl}/api/og-image?url=${encodeURIComponent(article.thumbnail_url)}`
+    : null;
+
   return {
     title: article.title,
     description: article.excerpt,
@@ -31,8 +36,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "article",
       publishedTime: article.published_at,
       authors: article.author ? [article.author.name] : [],
-      images: article.thumbnail_url
-        ? [{ url: article.thumbnail_url, width: 1200, height: 630, alt: article.title }]
+      images: ogImage
+        ? [{ url: ogImage, width: 1200, height: 630, alt: article.title }]
         : [],
     },
   };
