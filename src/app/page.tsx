@@ -40,35 +40,26 @@ export default async function HomePage({ searchParams }: Props) {
   // Zone 1 — hero (left) + sidebar articles (right)
   const mainHero = page === 1 ? (featured[0] ?? latest[0]) : null;
   const heroId = mainHero?.id ?? -1;
-  const trendingIds = new Set(trending.map((a) => a.id));
 
-  // Sidebar: up to 4 articles stacked beside the hero
-  // prefer featured (non-hero), then latest — exclude trending to avoid overlap
+  // Sidebar: 3 articles — prefer featured (non-hero), then latest
   const sidebarArticles =
     page === 1
       ? [
           ...featured.filter((a) => a.id !== heroId),
           ...latest.filter(
-            (a) =>
-              a.id !== heroId &&
-              !trendingIds.has(a.id) &&
-              !featured.some((f) => f.id === a.id)
+            (a) => a.id !== heroId && !featured.some((f) => f.id === a.id)
           ),
-        ].slice(0, 4)
+        ].slice(0, 3)
       : [];
 
-  // Zone 2 — 4-col equal row below the hero block
-  const usedZone1 = new Set([heroId, ...sidebarArticles.map((a) => a.id)]);
+  // Zone 2 — next 4 latest not already shown above
+  const usedIds = new Set([heroId, ...sidebarArticles.map((a) => a.id)]);
   const zone2Articles =
-    page === 1
-      ? latest
-          .filter((a) => !usedZone1.has(a.id) && !trendingIds.has(a.id))
-          .slice(0, 4)
-      : [];
+    page === 1 ? latest.filter((a) => !usedIds.has(a.id)).slice(0, 4) : [];
 
-  // Zone 3 — dense latest grid
-  const usedAll = new Set([...usedZone1, ...zone2Articles.map((a) => a.id)]);
-  const gridArticles = latest.filter((a) => !usedAll.has(a.id));
+  // Zone 3 — remaining latest
+  zone2Articles.forEach((a) => usedIds.add(a.id));
+  const gridArticles = latest.filter((a) => !usedIds.has(a.id));
 
   return (
     <>
