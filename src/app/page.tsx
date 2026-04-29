@@ -21,95 +21,145 @@ export default async function HomePage({ searchParams }: Props) {
   const page = Math.max(1, Number(pageParam) || 1);
 
   const [featured, { articles: latest, total }, trending] = await Promise.all([
-    getFeaturedArticles(3),
+    getFeaturedArticles(4),
     getLatestArticlesPaged(page, PAGE_SIZE),
     page === 1 ? getTrendingArticles(5) : Promise.resolve([]),
   ]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
+
+  // Hero: top featured, or fall back to latest[0]
   const heroArticle = page === 1 ? (featured[0] ?? latest[0]) : null;
-  const sideArticles =
+  const heroId = heroArticle?.id ?? -1;
+
+  // Sorotan row: remaining featured first, then fill from latest
+  const midArticles =
     page === 1
-      ? featured.slice(1, 3).length >= 2
-        ? featured.slice(1, 3)
-        : latest.slice(1, 3)
+      ? [
+          ...featured.filter((a) => a.id !== heroId),
+          ...latest.filter(
+            (a) => a.id !== heroId && !featured.some((f) => f.id === a.id)
+          ),
+        ].slice(0, 3)
       : [];
+
+  // Grid: everything else not shown above
+  const usedIds = new Set([heroId, ...midArticles.map((a) => a.id)]);
+  const gridArticles = latest.filter((a) => !usedIds.has(a.id));
 
   return (
     <>
       <Header />
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6">
-        {/* Hero section — only on page 1 */}
+
+        {/* ── Zone 1: Hero + Trending sidebar ── */}
         {page === 1 && heroArticle && (
-          <section className="border-b border-[var(--color-border)] pb-6 mb-6 sm:pb-10 sm:mb-10">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-              <div className="lg:col-span-2 lg:border-r lg:border-[var(--color-border)] lg:pr-8">
+          <section className="border-b border-[var(--color-border)] pb-8 mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+
+              {/* Hero */}
+              <div className="lg:col-span-8 lg:pr-8 lg:border-r lg:border-[var(--color-border)]">
                 <ArticleCard article={heroArticle} variant="hero" />
               </div>
 
-              <div className="flex flex-col">
-                {/* Side articles hidden on mobile — appear in the grid below */}
-                {sideArticles.map((article) => (
-                  <div key={article.id} className="hidden sm:block">
-                    <ArticleCard article={article} variant="side" />
+              {/* Trending sidebar */}
+              {trending.length > 0 && (
+                <div className="lg:col-span-4 lg:pl-8 mt-8 lg:mt-0 border-t lg:border-t-0 border-[var(--color-border)] pt-6 lg:pt-0">
+                  <div className="border-t-4 border-[var(--color-brand-red)] pt-3 mb-1">
+                    <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
+                      Trending
+                    </h2>
                   </div>
-                ))}
-
-                {trending.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-[var(--color-border)] sm:mt-5 sm:pt-5">
-                    <div className="mb-3 pb-2 border-b-2 border-[var(--color-brand-black)]">
-                      <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
-                        Trending
-                      </h2>
-                    </div>
-                    <ol className="space-y-0">
-                      {trending.map((article, i) => (
-                        <li
-                          key={article.id}
-                          className="flex gap-3 items-start py-2.5 border-b border-[var(--color-border)] last:border-0"
+                  <ol>
+                    {trending.map((article, i) => (
+                      <li
+                        key={article.id}
+                        className="flex gap-3 items-start py-3 border-b border-[var(--color-border)] last:border-0"
+                      >
+                        <span
+                          className="text-2xl font-bold text-[var(--color-border)] leading-none shrink-0 w-5 mt-0.5 select-none"
+                          style={{ fontFamily: "var(--font-serif)" }}
                         >
-                          <span
-                            className="text-2xl font-bold text-[var(--color-border)] leading-none shrink-0 w-5 mt-0.5 select-none"
-                            style={{ fontFamily: "var(--font-serif)" }}
-                          >
-                            {i + 1}
-                          </span>
-                          <ArticleCard article={article} variant="compact" />
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                )}
-              </div>
+                          {i + 1}
+                        </span>
+                        <ArticleCard article={article} variant="compact" />
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
             </div>
           </section>
         )}
 
-        {/* Latest news grid */}
-        {latest.length > 0 ? (
+        {/* ── Zone 2: Sorotan (mid row, 3 cols with dividers) ── */}
+        {page === 1 && midArticles.length > 0 && (
+          <section className="border-b border-[var(--color-border)] pb-8 mb-8">
+            <div className="border-t-4 border-[var(--color-brand-black)] pt-3 mb-6">
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
+                Sorotan
+              </h2>
+            </div>
+            <div
+              className={`grid grid-cols-1 md:divide-x divide-[var(--color-border)] ${
+                midArticles.length >= 3
+                  ? "md:grid-cols-3"
+                  : midArticles.length === 2
+                  ? "md:grid-cols-2"
+                  : "md:grid-cols-1"
+              }`}
+            >
+              {midArticles.map((article, i) => (
+                <div
+                  key={article.id}
+                  className={`${
+                    i === 0
+                      ? "md:pr-6"
+                      : i === midArticles.length - 1
+                      ? "md:pl-6"
+                      : "md:px-6"
+                  } ${
+                    i > 0
+                      ? "pt-6 md:pt-0 border-t md:border-t-0 border-[var(--color-border)]"
+                      : ""
+                  }`}
+                >
+                  <ArticleCard article={article} />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── Zone 3: Latest grid ── */}
+        {gridArticles.length > 0 ? (
           <section>
-            <div className="mb-6 pb-2 border-b-2 border-[var(--color-brand-black)]">
+            <div className="border-t-4 border-[var(--color-brand-black)] pt-3 mb-6">
               <h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">
                 Berita Terbaru
               </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-8">
-              {latest.map((article) => (
+              {gridArticles.map((article) => (
                 <ArticleCard key={article.id} article={article} />
               ))}
             </div>
             <Pagination currentPage={page} totalPages={totalPages} basePath="/" />
           </section>
         ) : (
-          <div className="py-32 text-center text-[var(--color-muted)]">
-            <p
-              className="text-2xl font-medium"
-              style={{ fontFamily: "var(--font-serif)" }}
-            >
-              Belum ada berita yang dipublikasikan.
-            </p>
-            <p className="mt-2 text-sm">Silakan tambahkan artikel melalui panel admin.</p>
-          </div>
+          latest.length === 0 && (
+            <div className="py-32 text-center text-[var(--color-muted)]">
+              <p
+                className="text-2xl font-medium"
+                style={{ fontFamily: "var(--font-serif)" }}
+              >
+                Belum ada berita yang dipublikasikan.
+              </p>
+              <p className="mt-2 text-sm">
+                Silakan tambahkan artikel melalui panel admin.
+              </p>
+            </div>
+          )
         )}
       </main>
       <Footer />
