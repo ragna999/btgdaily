@@ -118,7 +118,7 @@ export default async function HomePage({ searchParams }: Props) {
                       : ""
                   }`}
                 >
-                  <ArticleCard article={article} />
+                  <ArticleCard article={article} variant="mid" />
                 </div>
               ))}
             </div>

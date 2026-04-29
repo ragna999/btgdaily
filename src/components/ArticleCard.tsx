@@ -5,7 +5,7 @@ import type { Article } from "@/lib/types";
 
 interface Props {
   article: Article;
-  variant?: "default" | "hero" | "compact" | "side";
+  variant?: "default" | "hero" | "compact" | "side" | "mid";
 }
 
 export default function ArticleCard({ article, variant = "default" }: Props) {
@@ -54,6 +54,53 @@ export default function ArticleCard({ article, variant = "default" }: Props) {
             <span className="font-semibold text-[var(--color-brand-black)]">
               {author.name}
             </span>
+          )}
+          {author && <span>·</span>}
+          <time dateTime={article.published_at}>{formatDate(article.published_at)}</time>
+        </div>
+      </article>
+    );
+  }
+
+  if (variant === "mid") {
+    return (
+      <article className="group flex flex-col">
+        {article.thumbnail_url && (
+          <Link href={`/berita/${article.slug}`} className="block overflow-hidden mb-3">
+            <div className="relative h-44 w-full bg-[var(--color-subtle)]">
+              <Image
+                src={article.thumbnail_url}
+                alt={article.title}
+                fill
+                className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+              />
+            </div>
+          </Link>
+        )}
+        {category && (
+          <Link
+            href={`/kategori/${category.slug}`}
+            className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--color-brand-red)] hover:underline"
+          >
+            {category.name}
+          </Link>
+        )}
+        <Link href={`/berita/${article.slug}`} className="flex-1">
+          <h3
+            className="text-lg font-bold leading-snug mt-1.5 mb-2 group-hover:underline decoration-1 underline-offset-2 line-clamp-3"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            {article.title}
+          </h3>
+        </Link>
+        {article.excerpt && (
+          <p className="text-sm text-[var(--color-muted)] leading-relaxed line-clamp-2 mb-2">
+            {article.excerpt}
+          </p>
+        )}
+        <div className="flex items-center gap-1.5 text-[10px] text-[var(--color-muted)] mt-auto">
+          {author && (
+            <span className="font-semibold text-[var(--color-brand-black)]">{author.name}</span>
           )}
           {author && <span>·</span>}
           <time dateTime={article.published_at}>{formatDate(article.published_at)}</time>
