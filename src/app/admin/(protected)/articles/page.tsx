@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { verifySession } from "@/lib/dal";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin as supabase } from "@/lib/supabase-admin";
 import { formatDate } from "@/lib/utils";
 import DeleteArticleButton from "@/components/admin/DeleteArticleButton";
 
@@ -16,13 +16,13 @@ export default async function ArticlesPage() {
   const { profile } = await verifySession();
   const isAdmin = profile.role === "admin" || profile.role === "editor";
 
-  const query = supabase
+  let query = supabase
     .from("articles")
     .select("id, title, slug, status, is_featured, published_at, created_at, author_id, category:categories!category_id(name)")
     .order("created_at", { ascending: false })
     .limit(100);
 
-  if (!isAdmin) query.eq("author_id", profile.id);
+  if (!isAdmin) query = query.eq("author_id", profile.id);
 
   const { data: articles } = await query;
 
