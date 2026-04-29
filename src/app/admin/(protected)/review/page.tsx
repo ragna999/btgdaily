@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/dal";
 import { supabaseAdmin as supabase } from "@/lib/supabase-admin";
@@ -72,6 +73,12 @@ export default async function ReviewPage() {
                   </div>
 
                   <div className="flex flex-col gap-2 shrink-0">
+                    <Link
+                      href={`/admin/articles/${article.id}/preview`}
+                      className="w-full text-center border border-[var(--color-brand-black)] text-xs font-semibold px-4 py-2 hover:bg-[var(--color-subtle)] transition-colors"
+                    >
+                      Baca Artikel
+                    </Link>
                     <form action={publishArticle.bind(null, article.id)}>
                       <button
                         type="submit"
