@@ -32,19 +32,13 @@ export default async function HomePage({ searchParams }: Props) {
   const heroArticle = page === 1 ? (featured[0] ?? latest[0]) : null;
   const heroId = heroArticle?.id ?? -1;
 
-  // Sorotan row: remaining featured first, then fill from latest
+  // Sorotan row: only from featured (non-hero), max 3
   const midArticles =
-    page === 1
-      ? [
-          ...featured.filter((a) => a.id !== heroId),
-          ...latest.filter(
-            (a) => a.id !== heroId && !featured.some((f) => f.id === a.id)
-          ),
-        ].slice(0, 3)
-      : [];
+    page === 1 ? featured.filter((a) => a.id !== heroId).slice(0, 3) : [];
 
-  // Grid: everything else not shown above
-  const usedIds = new Set([heroId, ...midArticles.map((a) => a.id)]);
+  // Grid: latest articles, excluding any that already appear in featured zones
+  const usedIds = new Set(featured.map((a) => a.id));
+  usedIds.add(heroId);
   const gridArticles = latest.filter((a) => !usedIds.has(a.id));
 
   return (
