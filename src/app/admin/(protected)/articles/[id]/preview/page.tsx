@@ -14,7 +14,7 @@ export default async function ArticlePreviewPage({ params }: Props) {
 
   const { id } = await params;
 
-  const { data } = await supabaseAdmin
+  const { data, error } = await supabaseAdmin
     .from("articles")
     .select(
       "id, title, slug, content, excerpt, thumbnail_url, status, created_at, published_at, " +
@@ -23,7 +23,7 @@ export default async function ArticlePreviewPage({ params }: Props) {
     .eq("id", Number(id))
     .single();
 
-  if (!data) notFound();
+  if (error || !data) notFound();
 
   const author = data.author as unknown as { name: string; avatar_url: string | null } | null;
   const category = data.category as unknown as { name: string; slug: string } | null;
