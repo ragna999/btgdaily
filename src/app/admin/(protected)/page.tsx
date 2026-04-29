@@ -1,6 +1,5 @@
 import { verifySession } from "@/lib/dal";
-import { supabase } from "@/lib/supabase";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { supabaseAdmin, supabaseAdmin as supabase } from "@/lib/supabase-admin";
 import ProfileForm from "@/components/admin/ProfileForm";
 import type { UserProfile } from "@/lib/types";
 

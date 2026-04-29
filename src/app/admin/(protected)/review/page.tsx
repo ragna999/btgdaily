@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/dal";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin as supabase } from "@/lib/supabase-admin";
 import { formatDate } from "@/lib/utils";
 import { publishArticle, returnToDraft } from "@/app/actions/articles";
 
