@@ -31,7 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "article",
       publishedTime: article.published_at,
       authors: article.author ? [article.author.name] : [],
-      images: article.thumbnail_url ? [{ url: article.thumbnail_url }] : [],
+      images: article.thumbnail_url
+        ? [{ url: article.thumbnail_url, width: 1200, height: 630, alt: article.title }]
+        : [],
     },
   };
 }
