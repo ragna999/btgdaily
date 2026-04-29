@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/dal";
 import { supabaseAdmin as supabase } from "@/lib/supabase-admin";
 import { formatDate } from "@/lib/utils";
-import { publishArticle, returnToDraft } from "@/app/actions/articles";
 
 export const dynamic = "force-dynamic";
 
@@ -72,29 +71,13 @@ export default async function ReviewPage() {
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-2 shrink-0">
+                  <div className="shrink-0">
                     <Link
                       href={`/admin/articles/${article.id}/preview`}
-                      className="w-full text-center border border-[var(--color-brand-black)] text-xs font-semibold px-4 py-2 hover:bg-[var(--color-subtle)] transition-colors"
+                      className="block text-center bg-[var(--color-brand-black)] text-white text-xs font-semibold px-4 py-2 hover:bg-gray-800 transition-colors"
                     >
-                      Baca Artikel
+                      Review Artikel
                     </Link>
-                    <form action={publishArticle.bind(null, article.id)}>
-                      <button
-                        type="submit"
-                        className="w-full bg-[var(--color-brand-black)] text-white text-xs font-semibold px-4 py-2 hover:bg-gray-800 transition-colors"
-                      >
-                        Publish
-                      </button>
-                    </form>
-                    <form action={returnToDraft.bind(null, article.id)}>
-                      <button
-                        type="submit"
-                        className="w-full border border-[var(--color-border)] text-xs font-semibold px-4 py-2 hover:bg-[var(--color-subtle)] transition-colors"
-                      >
-                        Kembalikan ke Draft
-                      </button>
-                    </form>
                   </div>
                 </div>
               </div>
