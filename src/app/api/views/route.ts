@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin as supabase } from "@/lib/supabase-admin";
 
 export async function POST(req: NextRequest) {
-  const { articleId } = await req.json();
+  const { articleId, sessionId } = await req.json();
   if (!articleId || typeof articleId !== "number") {
     return NextResponse.json({ error: "Invalid articleId" }, { status: 400 });
   }
-  await supabase.rpc("increment_article_views", { p_article_id: articleId });
+  await supabase.rpc("increment_article_views", {
+    p_article_id: articleId,
+    p_session_id: typeof sessionId === "string" && sessionId ? sessionId : null,
+  });
   return NextResponse.json({ ok: true });
 }

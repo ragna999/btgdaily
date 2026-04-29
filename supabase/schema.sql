@@ -81,14 +81,32 @@ create index if not exists idx_events_created_at on events(created_at desc);
 -- ============================================================
 -- RPC: increment_article_views
 -- Dipanggil setiap artikel dibuka
+-- p_session_id dipakai untuk deduplication unique_views
 -- ============================================================
-create or replace function increment_article_views(article_id bigint)
+create or replace function increment_article_views(p_article_id bigint, p_session_id text default null)
 returns void language plpgsql security definer as $$
+declare
+  v_is_unique boolean := true;
 begin
+  if p_session_id is not null then
+    -- Cek apakah session ini sudah pernah buka artikel ini
+    select not exists (
+      select 1 from events
+      where article_id = p_article_id
+        and session_id = p_session_id
+        and event_type = 'view'
+    ) into v_is_unique;
+
+    -- Catat event (selalu, biar history lengkap)
+    insert into events(article_id, event_type, session_id)
+    values (p_article_id, 'view', p_session_id);
+  end if;
+
   insert into article_metrics(article_id, views, unique_views)
-  values (article_id, 1, 1)
+  values (p_article_id, 1, case when v_is_unique then 1 else 0 end)
   on conflict (article_id) do update
-    set views = article_metrics.views + 1;
+    set views        = article_metrics.views + 1,
+        unique_views = article_metrics.unique_views + case when v_is_unique then 1 else 0 end;
 end;
 $$;
 
