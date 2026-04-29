@@ -17,7 +17,7 @@ export default async function EditArticlePage({ params }: Props) {
   const [{ data }, categories, tags] = await Promise.all([
     supabase
       .from("articles")
-      .select("id, title, slug, content, excerpt, thumbnail_url, category_id, status, is_featured, published_at, author_id")
+      .select("id, title, slug, content, excerpt, thumbnail_url, category_id, status, is_featured, published_at, author_id, review_notes")
       .eq("id", Number(id))
       .single(),
     getCategories(),
@@ -28,6 +28,7 @@ export default async function EditArticlePage({ params }: Props) {
   if (!isAdmin && data.author_id !== profile.id) notFound();
 
   const article = data as unknown as Article;
+  const reviewNotes = (data as unknown as { review_notes: string | null }).review_notes;
   const boundUpdate = updateArticle.bind(null, article.id);
   const selectedTagIds = await getArticleTagIds(article.id);
 
@@ -47,6 +48,13 @@ export default async function EditArticlePage({ params }: Props) {
           Edit Artikel
         </h1>
       </div>
+
+      {reviewNotes && article.status === "draft" && (
+        <div className="bg-yellow-50 border border-yellow-200 p-4 mb-4 text-sm">
+          <p className="font-semibold text-yellow-800 mb-1">Catatan dari reviewer:</p>
+          <p className="text-yellow-700 whitespace-pre-wrap">{reviewNotes}</p>
+        </div>
+      )}
 
       <div className="bg-white border border-[var(--color-border)] p-6">
         <ArticleForm

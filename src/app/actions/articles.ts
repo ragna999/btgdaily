@@ -169,6 +169,23 @@ export async function returnToDraft(id: number) {
   revalidatePath("/admin/articles");
 }
 
+export async function returnToDraftWithNotes(formData: FormData) {
+  const { profile } = await verifySession();
+  if (profile.role === "writer") return;
+
+  const id = Number(formData.get("id"));
+  const notes = (formData.get("notes") as string).trim() || null;
+
+  await supabase
+    .from("articles")
+    .update({ status: "draft", review_notes: notes })
+    .eq("id", id);
+
+  revalidatePath("/admin/review");
+  revalidatePath("/admin/articles");
+  redirect("/admin/review");
+}
+
 export async function deleteArticle(id: number) {
   const { profile } = await verifySession();
   const isAdmin = profile.role === "admin" || profile.role === "editor";

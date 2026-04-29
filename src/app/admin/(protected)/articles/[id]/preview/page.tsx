@@ -4,7 +4,8 @@ import { notFound, redirect } from "next/navigation";
 import { verifySession } from "@/lib/dal";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { formatDate, estimateReadTime } from "@/lib/utils";
-import { publishArticle, returnToDraft } from "@/app/actions/articles";
+import { publishArticle } from "@/app/actions/articles";
+import ReturnToDraftForm from "@/components/admin/ReturnToDraftForm";
 
 type ArticleRow = {
   id: number;
@@ -77,14 +78,7 @@ export default async function ArticlePreviewPage({ params }: Props) {
 
           {row.status === "review" && (
             <div className="flex items-center gap-2 shrink-0">
-              <form action={returnToDraft.bind(null, row.id)}>
-                <button
-                  type="submit"
-                  className="text-xs font-semibold px-3 py-1.5 border border-gray-600 hover:border-gray-400 transition-colors"
-                >
-                  Kembalikan ke Draft
-                </button>
-              </form>
+              <ReturnToDraftForm articleId={row.id} />
               <form action={publishArticle.bind(null, row.id)}>
                 <button
                   type="submit"
